@@ -1,8 +1,10 @@
 from pymongo import MongoClient, DESCENDING
 import jsonschema
 import json
+import os
 import six
 
+HACK = True
 
 class AStore:
     def __init__(self, config):
@@ -15,37 +17,43 @@ class AStore:
         config: dict
             host, port in integer format, and database
         """
-        self.client = MongoClient(host=config['host'],
-                             port=config['port'])
-        self.database = self.client[config['database']]
-        self.database.analysis_header.create_index([('uid', DESCENDING)],
-                                                    unique=True,
-                                                   background=True)
-        self.database.analysis_header.create_index([('time', DESCENDING)],
-                                                   unique=False,
-                                                   background=True)
-        self.database.analysis_tail.create_index([('analysis_header',
-                                                   DESCENDING)],
-                                                 unique=True, background=True)
-        self.database.analysis_tail.create_index([('uid', DESCENDING)],
-                                                 unique=True, background=True)
-        self.database.analysis_tail.create_index([('time', DESCENDING)],
-                                                 unique=False, background=True)
-        self.database.data_reference_header.create_index([('analysis_header',
-                                                  DESCENDING)],
-                                                unique=True, background=False)
-        self.database.data_reference_header.create_index([('uid', DESCENDING)],
-                                                unique=True, background=False)
-        self.database.data_reference_header.create_index([('time', DESCENDING)],
-                                                unique=False)
-        self.database.data_reference.create_index([('time', DESCENDING),
-                                                  ('data_reference_header',
-                                                   DESCENDING)])
-        self.database.data_reference.create_index([('uid', DESCENDING)],
-                                                  unique=True)
-        self.database.data_reference.create_index([('data_reference_header',
-                                                    DESCENDING)],
-                                                  unique=False)
+        # TODO: Temporarily hard code mongo client.
+        if HACK:
+            self.client = MongoClient(f"mongodb://fmx_write:{os.environ['MONGO_PASSWORD_FMX']}@mongo1.nsls2.bnl.gov,mongo2.nsls2.bnl.gov,mongo3.nsls2.bnl.gov/?authSource=admin")
+            self.database = self.client['fmx-analysisstore']
+        else:
+            self.client = MongoClient(host=config['host'],
+                                 port=config['port'])
+            self.database = self.client[config['database']]
+        
+            self.database.analysis_header.create_index([('uid', DESCENDING)],
+                                                        unique=True,
+                                                       background=True)
+            self.database.analysis_header.create_index([('time', DESCENDING)],
+                                                       unique=False,
+                                                       background=True)
+            self.database.analysis_tail.create_index([('analysis_header',
+                                                       DESCENDING)],
+                                                     unique=True, background=True)
+            self.database.analysis_tail.create_index([('uid', DESCENDING)],
+                                                     unique=True, background=True)
+            self.database.analysis_tail.create_index([('time', DESCENDING)],
+                                                     unique=False, background=True)
+            self.database.data_reference_header.create_index([('analysis_header',
+                                                      DESCENDING)],
+                                                    unique=True, background=False)
+            self.database.data_reference_header.create_index([('uid', DESCENDING)],
+                                                    unique=True, background=False)
+            self.database.data_reference_header.create_index([('time', DESCENDING)],
+                                                    unique=False)
+            self.database.data_reference.create_index([('time', DESCENDING),
+                                                      ('data_reference_header',
+                                                       DESCENDING)])
+            self.database.data_reference.create_index([('uid', DESCENDING)],
+                                                      unique=True)
+            self.database.data_reference.create_index([('data_reference_header',
+                                                        DESCENDING)],
+                                                      unique=False)
 
     def doc_or_uid_to_uid(self, doc_or_uid):
         """Given Document or uid return the uid
