@@ -31,7 +31,7 @@ class AnalysisClient:
         if not self.use_ssl:
             url = 'http://{}:{}/'.format(self.host, self.port)
         else:
-            url = f'https://{self.host}'
+            url = f'https://{self.host}/'
         return url
 
     @property
