@@ -14,6 +14,7 @@ class AnalysisClient:
     def __init__(self, config):
         self.host = config['host']
         self.port = config['port']
+        self.use_ssl = config['use_ssl']
         self._insert_dict = {'analysis_header': self.insert_analysis_header,
                              'analysis_tail': self.insert_analysis_tail,
                              'data_reference_header': self.insert_data_reference_header,
@@ -27,7 +28,11 @@ class AnalysisClient:
     @property
     def _host_url(self):
         """URL to the tornado instance"""
-        return 'http://{}:{}/'.format(self.host, self.port)
+        if not self.use_ssl:
+            url = 'http://{}:{}/'.format(self.host, self.port)
+        else:
+            url = f'https://{self.host}'
+        return url
 
     @property
     def aheader_url(self):
