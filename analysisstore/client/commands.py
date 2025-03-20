@@ -13,8 +13,12 @@ class AnalysisClient:
     """Client used to pass messages between analysisstore server and apps"""
     def __init__(self, config):
         self.host = config['host']
-        self.port = config['port']
-        self.use_ssl = config['use_ssl']
+        self.port = config.get('port')
+        self.use_ssl = config.get('use_ssl')
+        if self.port is None and self.use_ssl is None:
+            raise KeyError("one of port or use_ssl must be defined")
+        if self.port and self.use_ssl:
+            raise KeyError("only one of port or use_ssl must be defined")
         self._insert_dict = {'analysis_header': self.insert_analysis_header,
                              'analysis_tail': self.insert_analysis_tail,
                              'data_reference_header': self.insert_data_reference_header,
@@ -28,9 +32,9 @@ class AnalysisClient:
     @property
     def _host_url(self):
         """URL to the tornado instance"""
-        if not self.use_ssl:
+        if not self.use_ssl:  # if not using ssl, connect to specified port
             url = 'http://{}:{}/'.format(self.host, self.port)
-        else:
+        else:  # if using ssl, just use https protocol
             url = f'https://{self.host}/'
         return url
 

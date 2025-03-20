@@ -10,3 +10,5 @@ def test_client_badconf():
     conn = AnalysisClient(config)
     conn.host == testing_config["host"]
     conn.port == testing_config["port"]
+    config["use_ssl"] = True
+    pytest.raises(KeyError, AnalysisClient, config)
