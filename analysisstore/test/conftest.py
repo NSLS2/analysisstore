@@ -18,6 +18,7 @@ testing_config = dict(
     mongo_host="localhost",
     mongo_port=27017,
     testing=True,
+    use_ssl=True,
     log_file_prefix="testing",
 )
 
@@ -45,5 +46,13 @@ def astore_server():
 def astore_client():
     c = AnalysisClient(
         {"host": testing_config["mongo_host"], "port": testing_config["service_port"]}
+    )
+    return c
+
+@pytest.fixture(scope="function")
+def astore_client_ssl():
+    c = AnalysisClient(
+        {"host": testing_config["mongo_host"], "use_ssl": testing_config["use_ssl"],
+         "port": testing_config["port"]}
     )
     return c
