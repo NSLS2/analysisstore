@@ -16,9 +16,7 @@ class AnalysisClient:
         self.port = config.get('port')
         self.use_ssl = config.get('use_ssl')
         if self.port is None and self.use_ssl in (None, False):
-            raise KeyError("one of port or use_ssl must be defined")
-        if self.port is not None and self.use_ssl is not None:
-            raise KeyError("only one of port or use_ssl must be defined")
+            raise KeyError("at least one of port or use_ssl must be defined")
         self._insert_dict = {'analysis_header': self.insert_analysis_header,
                              'analysis_tail': self.insert_analysis_tail,
                              'data_reference_header': self.insert_data_reference_header,
