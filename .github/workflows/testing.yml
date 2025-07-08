@@ -32,7 +32,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python ${{ matrix.python-version }} with conda
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@9f54435e0e72c53962ee863144e47a4b094bfd35 # v2
         with:
           activate-environment: ${{ env.REPOSITORY_NAME }}-py${{ matrix.python-version }}
           auto-update-conda: true
