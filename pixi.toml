@@ -1,0 +1,26 @@
+[workspace]
+authors = ["vshekar1 <vshekar1@bnl.gov>"]
+channels = ["conda-forge"]
+name = "analysisstore"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+# Usage: pixi run start --database analysisstore --mongo_uri mongodb://localhost --service_port 8999
+start = "python -m analysisstore.startup"
+
+[dependencies]
+python = "3.11.*"
+mock = ">=5.2.0,<6"
+mongomock = ">=4.3.0,<5"
+pytest = ">=9.1.1,<10"
+doct = ">=1.1.0,<2"
+six = ">=1.17.0,<2"
+mongoquery = ">=1.4.3,<2"
+jsonschema = ">=4.26.0,<5"
+pymongo = ">=4.17.0,<5"
+pyyaml = ">=6.0.3,<7"
+requests = ">=2.34.2,<3"
+tornado = ">=6.5.8,<7"
+ujson = ">=5.13.0,<6"
+setuptools = ">=70,<81"
