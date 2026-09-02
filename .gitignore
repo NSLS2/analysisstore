@@ -89,3 +89,6 @@ generated/
 
 # ctags
 .tags*
+# pixi environments
+.pixi/*
+!.pixi/config.toml
