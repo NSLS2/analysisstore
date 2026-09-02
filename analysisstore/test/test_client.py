@@ -26,6 +26,23 @@ def test_urls(astore_client):
     astore_client.dref_header_url == base_test_url + "data_reference_header"
 
 
+def test_urls_use_base_url_when_configured():
+    base_url = "https://services.example.org/analysisstore"
+    client = AnalysisClient(
+        {
+            "base_url": base_url,
+            "host": "localhost",
+            "service_port": 8999,
+        }
+    )
+
+    assert client._host_url == base_url + "/"
+    assert client.aheader_url == base_url + "/analysis_header"
+    assert client.atail_url == base_url + "/analysis_tail"
+    assert client.dref_url == base_url + "/data_reference"
+    assert client.dref_header_url == base_url + "/data_reference_header"
+
+
 def test_doc_or_uid_to_uid(astore_server, astore_client):
     m_uid = str(uuid.uuid4())
     test_dict = {"name": "test_doc", "uid": m_uid}

@@ -12,8 +12,10 @@ class AnalysisClient:
     """Client used to pass messages between analysisstore server and apps"""
 
     def __init__(self, config):
-        self.host = config["host"]
-        self.service_port = config["service_port"]
+        self.base_url = config.get("base_url")
+        if self.base_url is None:
+            self.host = config["host"]
+            self.service_port = config["service_port"]
         self._insert_dict = {
             "analysis_header": self.insert_analysis_header,
             "analysis_tail": self.insert_analysis_tail,
@@ -31,6 +33,8 @@ class AnalysisClient:
     @property
     def _host_url(self):
         """URL to the tornado instance"""
+        if self.base_url is not None:
+            return self.base_url.rstrip("/") + "/"
         return "http://{}:{}/".format(self.host, self.service_port)
 
     @property
