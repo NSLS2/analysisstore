@@ -3,7 +3,6 @@ authors = ["vshekar1 <vshekar1@bnl.gov>"]
 channels = ["conda-forge"]
 name = "analysisstore"
 platforms = ["linux-64"]
-version = "0.1.0"
 
 [tasks]
 # Usage: pixi run start --database analysisstore --mongo_uri mongodb://localhost --service_port 8999
