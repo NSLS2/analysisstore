@@ -1,4 +1,5 @@
 [workspace]
+requires-pixi = ">=0.82.1"
 authors = ["vshekar1 <vshekar1@bnl.gov>"]
 channels = ["conda-forge"]
 name = "analysisstore"
